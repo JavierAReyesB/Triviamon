@@ -23,13 +23,15 @@ const Trivia = () => {
   }, [])
 
   const generateOptions = (pokemons) => {
-    const correctName = pokemons[0].name
-    setCorrectName(correctName)
-    const otherOption = pokemons[1].name
-    const shuffledOptions = [correctName, otherOption].sort(
-      () => Math.random() - 0.5
-    )
-    setOptions(shuffledOptions)
+    if (pokemons && pokemons.length > 1) {
+      const correctName = pokemons[0].name
+      setCorrectName(correctName)
+      const otherOption = pokemons[1].name
+      const shuffledOptions = [correctName, otherOption].sort(
+        () => Math.random() - 0.5
+      )
+      setOptions(shuffledOptions)
+    }
   }
 
   const handleAnswer = async (selectedName) => {
@@ -59,10 +61,14 @@ const Trivia = () => {
       {pokemons.length > 0 ? (
         <div>
           <h3>¿Quién es este Pokémon?</h3>
-          <img
-            src={pokemons[0].sprites.other['official-artwork'].front_default}
-            alt={pokemons[0].name}
-          />
+          {pokemons[0]?.sprites?.other['official-artwork']?.front_default ? (
+            <img
+              src={pokemons[0].sprites.other['official-artwork'].front_default}
+              alt={pokemons[0].name}
+            />
+          ) : (
+            <p>Cargando imagen del Pokémon...</p>
+          )}
           <h4>¿Cuál es el nombre de este Pokémon?</h4>
           {options.map((option, index) => (
             <button key={index} onClick={() => handleAnswer(option)}>
